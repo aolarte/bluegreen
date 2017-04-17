@@ -1,0 +1,9 @@
+.idea
+.git
+.mvn
+.gradle
+build
+/*.iml
+/*.ipr
+/*.iws
+/logback.groovy
