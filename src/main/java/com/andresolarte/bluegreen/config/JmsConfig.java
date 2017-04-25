@@ -20,21 +20,27 @@ public class JmsConfig {
     private String brokerUrl;
 
     @Bean
-    MessageConverter document2MessageConverter() {
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
+
+    @Bean
+    public MessageConverter document2MessageConverter(ObjectMapper objectMapper) {
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
         converter.setTypeIdPropertyName("DocumentType");
-        converter.setObjectMapper(new ObjectMapper());
+        converter.setObjectMapper(objectMapper);
         return converter;
 
     }
 
     @Bean
-    public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(ConnectionFactory connectionFactory) {
+    public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(ConnectionFactory connectionFactory,
+                                                                          MessageConverter document2MessageConverter) {
         DefaultJmsListenerContainerFactory factory =
                 new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         //factory.setDestinationResolver(destinationResolver());
-        factory.setMessageConverter(document2MessageConverter());
+        factory.setMessageConverter(document2MessageConverter);
         factory.setConcurrency("3-10");
         return factory;
     }

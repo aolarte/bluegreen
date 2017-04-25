@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class ActiveMqV2Listener {
 
 
-    @JmsListener(destination = "mailbox", selector = "(Version = '2') OR (Version IS NULL)")
+    @JmsListener(destination = "mailbox", selector = "(Versions = '2') OR (Versions IS NULL)")
     public void receiveMessage(Email email) {
         System.out.println("V2 Received <" + email + ">");
     }
