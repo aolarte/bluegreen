@@ -57,7 +57,7 @@ public class TestService {
         jmsTemplate.convertAndSend("mailbox", email, new MessagePostProcessor() {
             @Override
             public Message postProcessMessage(Message message) throws JMSException {
-                message.setStringProperty("Versions", "1");
+                message.setStringProperty("Version", "1");
                 return message;
             }
         });
@@ -65,7 +65,7 @@ public class TestService {
         jmsTemplate.convertAndSend("mailbox", email, new MessagePostProcessor() {
             @Override
             public Message postProcessMessage(Message message) throws JMSException {
-                message.setStringProperty("Versions", "2");
+                message.setStringProperty("Version", "2");
                 return message;
             }
         });

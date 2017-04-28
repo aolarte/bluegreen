@@ -6,11 +6,19 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.processor.loadbalancer.WeightedLoadBalancer;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class BlueGreenRouteBuilder extends RouteBuilder {
+
+    private final DynamicWeightedLoadBalancer loadBalancer;
+
+    @Inject
+    public BlueGreenRouteBuilder(DynamicWeightedLoadBalancer loadBalancer) {
+        this.loadBalancer = loadBalancer;
+    }
 
 
     public static class MyLoadBalancer extends WeightedLoadBalancer {
@@ -34,6 +42,14 @@ public class BlueGreenRouteBuilder extends RouteBuilder {
         distributionRatio.add(2);
         distributionRatio.add(1);
 
-        from("direct:start").loadBalance().weighted(true, "10,10");
+        from("direct:startSelector").loadBalance(loadBalancer)
+                .to("direct:blueSelector")
+                .to("direct:greenSelector");
+
+
     }
+
+
+
+
 }
